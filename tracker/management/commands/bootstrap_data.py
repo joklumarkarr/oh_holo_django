@@ -3,62 +3,11 @@ import time
 from django.core.management.base import BaseCommand
 from django.utils.dateparse import parse_datetime
 
-from tracker.models import StreamArchive, VTuber
 from tracker import services
+from tracker.models import StreamArchive, VTuber
+from tracker.sync import pick_entry, upsert_live_or_upcoming, upsert_past_video
 
 S = StreamArchive.Status
-
-def pick_entry(entries):
-    """A channel can show up 0, 1, or 2+ times in the live/upcoming batch
-    (e.g. live now AND a separate stream scheduled later). Live wins; if
-    nothing's live, take the soonest upcoming one. Non-stream items
-    (freechat/schedule community posts) are filtered out entirely."""
-    entries = [e for e in entries if e.get("type") == "stream"]
-    if not entries:
-        return None
-    live = [e for e in entries if e.get("status") == "live"]
-    if live:
-        return live[0]
-    upcoming = sorted(entries, key=lambda e: e.get("start_scheduled") or "")
-    return upcoming[0] if upcoming else None
-
-def upsert_live_or_upcoming(vtuber, entry):
-    is_live = entry["status"] == "live"
-    StreamArchive.objects.update_or_create(
-        stream_id=entry["id"],
-        defaults={
-            "vtuber": vtuber,
-            "platform": StreamArchive.Platform.YOUTUBE,
-            "title": entry.get("title", "")[:300],
-            "status": S.LIVE if is_live else S.UPCOMING,
-            "url": f"https://www.youtube.com/watch?v={entry['id']}",
-            "scheduled_at": parse_datetime(entry.get("start_scheduled") or ""),
-            "started_at": parse_datetime(entry.get("start_actual") or ""),
-        },
-    )
-    vtuber.is_live_youtube = is_live
-    vtuber.save(update_fields=["is_live_youtube"])
-
-
-def upsert_past_video(vtuber, video):
-    started = parse_datetime(video.get("start_actual") or video.get("available_at") or "")
-    ended = None
-    if started and video.get("duration"):
-        from datetime import timedelta
-        ended = started + timedelta(seconds=video["duration"])
-    StreamArchive.objects.update_or_create(
-        stream_id=video["id"],
-        defaults={
-            "vtuber": vtuber,
-            "platform": StreamArchive.Platform.YOUTUBE,
-            "title": video.get("title", "")[:300],
-            "status": S.ENDED,
-            "url": f"https://www.youtube.com/watch?v={video['id']}",
-            "started_at": started,
-            "ended_at": ended,
-        },
-    )
-
 
 class Command(BaseCommand):
     help = "Seed VTuber stats and current/past streams from Holodex."
