@@ -74,6 +74,15 @@
             return (n === null || n === undefined) ? "—" : n.toLocaleString();
         }
 
+        function fmtSubs(n) {
+            if (n === null || n === undefined) return "—";
+            if (n >= 1000000) {
+                return (n / 1000000).toFixed(2) + " M";
+            } else if (n >= 100000) {
+                return (n / 1000) + ' K';
+            }
+        }
+
         function showStream(kind, v) {
             const s = v.streams[kind];
             if (!s) return;
@@ -102,15 +111,24 @@
             img.src = v.icon_url;
             altImg.src = v.alt_icon_url;
             channelLink.href = v.channel_link;
-            subs.textContent = fmtCount(v.subscribers);
+            subs.textContent = fmtSubs(v.subscribers);
             views.textContent = fmtCount(v.views);
             showDefaultStream(v);
             updateButtons(v);
         }
 
+        function playNoise() {
+            const v = state.get(select.value);
+            if (!v.noise_url) return;
+            const noise = new Audio(v.noise_url);
+            noise.volume = 0.5;
+            noise.play();
+        }
+
         premiereBtn.addEventListener("click", () => showStream("upcoming", state.get(select.value)));
         liveBtn.addEventListener("click", () => showStream("live", state.get(select.value)));
         completedBtn.addEventListener("click", () => showStream("completed", state.get(select.value)));
+        img.addEventListener("click", playNoise);
         select.addEventListener("change", applySelection);
         document.getElementById("reloadButton").addEventListener("click", () => location.reload());
 

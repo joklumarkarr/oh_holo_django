@@ -100,6 +100,6 @@ class Command(BaseCommand):
             except Exception as e:
                 self.stderr.write(f"    past video failed: {e}")
 
-            time.sleep(0.3)  # be polite to Holodex's rate limits between per-channel calls
+            time.sleep(0.1)  # be polite to Holodex's rate limits between per-channel calls
 
         self.stdout.write(self.style.SUCCESS("Bootstrap complete."))

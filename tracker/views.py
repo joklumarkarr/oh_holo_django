@@ -29,6 +29,7 @@ def vtuber_payload(vtuber):
         "name": vtuber.name,
         "icon_url": static(f"tracker/images/{vtuber.icon or 'placeholder.png'}"),
         "alt_icon_url": static(f"tracker/images/{vtuber.alt_icon or 'placeholder.png'}"),
+        "noise_url": static(f"tracker/sounds/{vtuber.noise}") if vtuber.noise else "",
         "channel_link": f"https://www.youtube.com/channel/{vtuber.youtube_channel_id}" if vtuber.youtube_channel_id else "",
         "subscribers": vtuber.subscriber_count,
         "views": vtuber.view_count,
@@ -45,6 +46,5 @@ def index(request):
     payload = [vtuber_payload(v) for v in vtubers]
     return render(request, "tracker/index.html", {
         "vtubers": vtubers,
-        #"vtubers_json": json.dumps(payload),
         "vtubers_json": payload,
     })
