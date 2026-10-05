@@ -13,3 +13,21 @@ class VTuber(models.Model):
 
     def __str__(self):
         return self.name
+
+class StreamArchive(models.Model):
+    class Platform(models.TextChoices):
+        YOUTUBE = "youtube", "YouTube"
+        TWITCH = "twitch", "Twitch"
+
+    vtuber = models.ForeignKey(VTuber, on_delete=models.CASCADE, related_name="streams")
+    platform = models.CharField(max_length=10, choices=Platform.choices)
+    stream_id = models.CharField(max_length=64, unique=True)
+    title = models.CharField(max_length=300, blank=True)
+    started_at = models.DateTimeField(null=True, blank=True)
+    ended_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-started_at"]
+
+    def __str__(self):
+        return f"{self.vtuber} [{self.platform}] {self.title[:40]}"
