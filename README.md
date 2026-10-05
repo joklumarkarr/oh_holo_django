@@ -1,3 +1,5 @@
+Activate venv
+    (Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) # powershell
 Change vtuber list by editing seed_data.py and adding css
 Seed data from the vtuber list with 
     python manage.py seed_data
@@ -10,6 +12,10 @@ Test redis with:
     docker exec -it oh-holo-redis redis-cli ping
 Test live poll during runserver:
     python manage.py poll_live --interval 30 -v 2
+Deploying in docker:
+    docker compose up --build
+    docker compose logs -f poller
+    docker compose exec web python manage.py createsuperuser
 
 ## Deploying somewhere real
 

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,13 +22,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-elg+x!t_00%$ncpvc(24$47w4w^wcoq)ir1y26v+weg_imc-0+'
+_DEV_SECRET_KEY = 'django-insecure-elg+x!t_00%$ncpvc(24$47w4w^wcoq)ir1y26v+weg_imc-0+'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", _DEV_SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Defaults to ON so your local Windows dev loop needs no environment variables.
+# Containers set DJANGO_DEBUG=0 explicitly.
+DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
 
-ALLOWED_HOSTS = []
+if not DEBUG and SECRET_KEY == _DEV_SECRET_KEY:
+    raise ImproperlyConfigured("DJANGO_DEBUG=0 requires DJANGO_SECRET_KEY to be set to a real secret.")
 
+def _env_list(name):
+    return [item.strip() for item in os.environ.get(name, "").split(",") if item.strip()]
+
+# Empty is fine in dev (Django auto-allows localhost when DEBUG=True).
+# With DEBUG off, list every hostname the site is reached by, e.g. "oh-holo.lan,localhost".
+ALLOWED_HOSTS = _env_list("DJANGO_ALLOWED_HOSTS")
+# Needed for the admin login over a non-localhost origin. Schemes are required: "http://oh-holo.lan"
+CSRF_TRUSTED_ORIGINS = _env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
 
 # Application definition
 
@@ -52,6 +65,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# In production nothing like `runserver` serves static files for us, so WhiteNoise
+# does it from inside the app. In dev, Django's own static handling is used.
+if not DEBUG:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'oh_holo_django.urls'
 
@@ -76,19 +93,39 @@ ASGI_APPLICATION = 'oh_holo_django.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {'hosts': [('127.0.0.1', 6379)]},
+        'CONFIG': {
+            'hosts': [{
+                'address': os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379'),
+                # channels_redis waits up to 5s inside a blocking read for the next message.
+                # redis-py 8 gives every socket read a 5s timeout by default, so an idle
+                # consumer dies at exactly 5s. Keep this comfortably above 5.
+                'socket_timeout': 30,
+            }],
+        },
     },
 }
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# SQLite for local dev; Postgres whenever POSTGRES_HOST is set (containers).
+if os.environ.get('POSTGRES_HOST'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_DB', 'ohholo'),
+            'USER': os.environ.get('POSTGRES_USER', 'ohholo'),
+            'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+            'HOST': os.environ['POSTGRES_HOST'],
+            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -126,7 +163,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
+# `collectstatic` gathers every app's static files here; WhiteNoise serves them.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    # Compressed (gzip/brotli) but deliberately NOT hashed-filename "Manifest" storage:
+    # our templates build image/sound URLs dynamically from database values, and the
+    # manifest variant raises an error in production for any file it doesn't know about.
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage'},
+}
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration

@@ -1,0 +1,66 @@
+# Shared by every service that runs our own image.
+x-app: &app
+  image: oh-holo:dev
+  build: .
+  env_file: .env
+  environment:
+    DJANGO_DEBUG: "0"
+    POSTGRES_HOST: db
+    REDIS_URL: redis://redis:6379
+
+services:
+  db:
+    image: postgres:16-alpine
+    env_file: .env          # the image reads POSTGRES_DB / POSTGRES_USER / POSTGRES_PASSWORD
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]   # channel layer data is disposable
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  # One-shot job: apply migrations and (re)seed the talent list, then exit.
+  migrate:
+    <<: *app
+    command: sh -c "python manage.py migrate --noinput && python manage.py seed_data"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  web:
+    <<: *app
+    ports:
+      - "8000:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  poller:
+    <<: *app
+    command: python manage.py poll_live
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    stop_grace_period: 15s   # poll_live finishes its current step on SIGTERM
+    restart: unless-stopped
+
+volumes:
+  pgdata:

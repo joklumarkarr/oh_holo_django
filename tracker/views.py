@@ -42,7 +42,7 @@ def vtuber_payload(vtuber):
 
 
 def index(request):
-    vtubers = VTuber.objects.all()
+    vtubers = VTuber.objects.order_by("id")
     payload = [vtuber_payload(v) for v in vtubers]
     return render(request, "tracker/index.html", {
         "vtubers": vtubers,
