@@ -132,7 +132,23 @@
         select.addEventListener("change", applySelection);
         document.getElementById("reloadButton").addEventListener("click", () => location.reload());
 
+        function connectLiveSocket() {
+            const scheme = location.protocol === "https:" ? "wss" : "ws";
+            const socket = new WebSocket(`${scheme}://${location.host}/ws/live-status/`);
+
+            socket.addEventListener("message", (event) => {
+                const updated = JSON.parse(event.data);
+                state.set(updated.slug, { ...state.get(updated.slug), ...updated });
+                if (updated.slug === select.value) applySelection();
+            });
+
+            // If the connection drops (server restart, network blip), just reconnect —
+            // simplest possible approach for now; fine until we have a reason to do better.
+            socket.addEventListener("close", () => setTimeout(connectLiveSocket, 2000));
+        }
+
         applySelection();
+        connectLiveSocket();
     </script>
 </body>
 </html>
