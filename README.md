@@ -8,6 +8,8 @@ Start redis for testing:
     docker run -d -p 6379:6379 --name oh-holo-redis redis:7
 Test redis with:
     docker exec -it oh-holo-redis redis-cli ping
+Test live poll during runserver:
+    python manage.py poll_live --interval 30 -v 2
 
 ## Deploying somewhere real
 
