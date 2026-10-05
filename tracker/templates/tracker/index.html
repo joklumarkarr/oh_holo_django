@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head><title>oh hi</title></head>
+<body>
+  <h1>VTubers</h1>
+  <ul>
+    {% for v in vtubers %}
+      <li>{{ v.name }} — {% if v.is_live_youtube or v.is_live_twitch %}🔴 live{% else %}offline{% endif %}</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
