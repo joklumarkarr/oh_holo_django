@@ -9,12 +9,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         created, updated = 0, 0
-        for slug, name, icon, youtube_channel_id, twitch_username in TALENTS:
+        for slug, name, icon, alt_icon, youtube_channel_id, twitch_username in TALENTS:
             obj, was_created = VTuber.objects.update_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
                     "icon": icon,
+                    "alt_icon": alt_icon,
                     "youtube_channel_id": youtube_channel_id,
                     "twitch_username": twitch_username,
                 },

@@ -162,6 +162,7 @@ html, body {
     height: 200px;
     transition: transform 0.3s, filter 0.3s; /* Smooth transition */
     filter: grayscale(100%); /* Convert image to grayscale */
+    border-radius: 50%;
 }
 #clickableImage:hover {
     transform: scale(1.1); /* Scale image by 10% on hover */
@@ -172,6 +173,7 @@ html, body {
     height: 90px;
     transition: transform 0.3s, filter 0.3s; /* Smooth transition */
     filter: grayscale(100%); /* Convert image to grayscale */
+    border-radius: 50%;
     
     align-self: flex-end;
 }

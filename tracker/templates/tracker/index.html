@@ -7,31 +7,114 @@
     <link rel="stylesheet" href="{% static 'tracker/css/styles.css' %}">
 </head>
 <body>
-    <select id="channelSelector">
+    <select id="channelSelector" class="select">
         {% for v in vtubers %}
-        <option value="{{ v.slug }}" data-image="{% static 'tracker/images/' %}{{ v.icon|default:'placeholder.png' }}">
-            {{ v.name }}
-        </option>
+        <option class="selectOption" value="{{ v.slug }}">{{ v.name }}</option>
         {% endfor %}
     </select>
 
-    <div class="card">
-        <img id="vtuberImage" src="" alt="" style="width: 200px; height: 200px; object-fit: cover; border-radius: 0.8rem;">
-        <p id="vtuberStatus"></p>
+    <div class="image-container">
+        <button id="reloadButton">↻</button>
+        <img id="clickableImage" src="" alt="" style="object-fit: cover;">
+        <a id="channelLink" href="" target="_blank">
+            <img id="altClickableImage" src="" alt="" style="object-fit: cover;">
+        </a>
     </div>
 
-    <script>
-        const select = document.getElementById("channelSelector");
-        const img = document.getElementById("vtuberImage");
+    <div class="card">
+        <div id="subs">
+            <h2>Subscribers</h2>
+            <p id="subscriberCount">—</p>
+        </div>
+        <div id="horizontalDivider"></div>
+        <div id="views">
+            <h2>Total Views</h2>
+            <p id="viewCount">—</p>
+        </div>
+        <div class="clearfix"></div>
+    </div>
 
-        function applySelection() {
-            const opt = select.options[select.selectedIndex];
-            document.documentElement.className = opt.value;   // drives the :root.<slug> CSS vars
-            img.src = opt.dataset.image;
+    <div class="card" id="livestreamDisplay">
+        <p class="top-left-text" id="titleDisplay">Title</p>
+        <a href="" target="_blank" id="videoThumbnailLink">
+            <img src="" class="card-image" id="videoThumbnail" alt="">
+        </a>
+        <div id="livestreamInfoDisplay">
+            <p class="bottom-left-text" id="dateDisplay">Date</p>
+            <div id="livestreamButtonDisplay">
+                <button class="button" id="premiereBtn">🕔</button>
+                <button class="button" id="liveBtn">🔴</button>
+                <button class="button" id="completedBtn">🔘</button>
+            </div>
+        </div>
+    </div>
+
+{{ vtubers_json|json_script:"vtuber-state" }}
+
+    <script>
+        window.__VTUBER_STATE__ = JSON.parse( document.getElementById("vtuber-state").textContent);
+
+        const state = new Map( window.__VTUBER_STATE__.map(v => [v.slug, v]));
+
+        const select = document.getElementById("channelSelector");
+        const img = document.getElementById("clickableImage");
+        const altImg = document.getElementById("altClickableImage");
+        const channelLink = document.getElementById("channelLink");
+        const subs = document.getElementById("subscriberCount");
+        const views = document.getElementById("viewCount");
+        const titleDisplay = document.getElementById("titleDisplay");
+        const dateDisplay = document.getElementById("dateDisplay");
+        const thumb = document.getElementById("videoThumbnail");
+        const thumbLink = document.getElementById("videoThumbnailLink");
+        const premiereBtn = document.getElementById("premiereBtn");
+        const liveBtn = document.getElementById("liveBtn");
+        const completedBtn = document.getElementById("completedBtn");
+
+        function fmtCount(n) {
+            return (n === null || n === undefined) ? "—" : n.toLocaleString();
         }
 
+        function showStream(kind, v) {
+            const s = v.streams[kind];
+            if (!s) return;
+            titleDisplay.textContent = s.title;
+            dateDisplay.textContent = s.date ? new Date(s.date).toLocaleString() : "";
+            thumb.src = s.thumbnail;
+            thumbLink.href = s.link || "#";
+        }
+
+        function showDefaultStream(v) {
+            if (v.streams.live) showStream("live", v);
+            else if (v.streams.upcoming) showStream("upcoming", v);
+            else if (v.streams.completed) showStream("completed", v);
+            else { titleDisplay.textContent = "No stream data yet"; dateDisplay.textContent = ""; thumb.src = ""; }
+        }
+
+        function updateButtons(v) {
+            premiereBtn.style.display = v.streams.upcoming ? "" : "none";
+            liveBtn.style.display = v.streams.live ? "" : "none";
+            completedBtn.style.display = v.streams.completed ? "" : "none";
+        }
+
+        function applySelection() {
+            const v = state.get(select.value);
+            document.documentElement.className = v.slug;
+            img.src = v.icon_url;
+            altImg.src = v.alt_icon_url;
+            channelLink.href = v.channel_link;
+            subs.textContent = fmtCount(v.subscribers);
+            views.textContent = fmtCount(v.views);
+            showDefaultStream(v);
+            updateButtons(v);
+        }
+
+        premiereBtn.addEventListener("click", () => showStream("upcoming", state.get(select.value)));
+        liveBtn.addEventListener("click", () => showStream("live", state.get(select.value)));
+        completedBtn.addEventListener("click", () => showStream("completed", state.get(select.value)));
         select.addEventListener("change", applySelection);
-        applySelection();  // run once on load for the default selection
+        document.getElementById("reloadButton").addEventListener("click", () => location.reload());
+
+        applySelection();
     </script>
 </body>
 </html>
