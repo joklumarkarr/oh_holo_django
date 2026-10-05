@@ -3,9 +3,22 @@
 # or clobber live-status fields that get updated separately at runtime.
 
 TALENTS = [
-    # slug,     name,      youtube_channel_id,          twitch_username
-    ("mumei",   "Mumei",   "UC3n5uGu18FoCy23ggWWp8tA",  ""),
-    ("fauna",   "Fauna",   "UCO_aKKYxn4tvrqPjcTzZ6EQ",  ""),
-    ("bae",     "Bae",     "UCgmPnx-EEeOrZSg5Tiw7ZRQ",  ""),
-    ("gura",    "Gura",    "UCoSrY_IQQVpmIRZ9Xf-y93g",  ""),
+    # slug,      name,       icon,              youtube_channel_id,         twitch_username
+    ("mumei",    "Mumei",    "mumeiload.png",   "UC3n5uGu18FoCy23ggWWp8tA", ""),
+    ("fauna",    "Fauna",    "fauuuuuna.png",   "UCO_aKKYxn4tvrqPjcTzZ6EQ", ""),
+    ("bae",      "Bae",      "baeconfused.png", "UCgmPnx-EEeOrZSg5Tiw7ZRQ", ""),
+    ("kronii",   "Kronii",   "kroniiwink.png",  "UCmbs8T6MWqUHP1tIQvSgKrg", ""),
+    ("liz",      "Liz",      "lizfreak.png",    "UCW5uhrG1eCBYditmhL0Ykjw", ""),
+    ("nerissa",  "Nerissa",  "rissavibe.png",   "UC_sFNM0z0MWm9A6WlKPuMMg", ""),
+    ("gura",     "Gura",     "guraspin.png",    "UCoSrY_IQQVpmIRZ9Xf-y93g", ""),
+    ("ina",      "Ina",      "tomorrow.png",    "UCMwGHR0BTZuLsmjY_NT5Pwg", ""),
+    ("kiara",    "Kiara",    "kiarapeek.png",   "UCHsx4Hqa-1ORjQTh9TYDhww", ""),
+    ("minto",    "Minto",    "mintwink.png",    "UCcHHkJ98eSfa5aj0mdTwwLQ", ""),
+    ("raora",    "Raora",    "",                "UCl69AEx4MdqMZH7Jtsm7Tig", ""),
+    ("kaela",    "Kaela",    "",                "UCZLZ8Jjx_RN2CXloOmgTHVg", ""),
+    ("gigi",     "Gigi",     "",                "UCDHABijvPBnJm7F-KlNME3w", ""),
+    ("shiorin",  "Shiorin",  "shiozoom.png",    "UCgnfPPb9JI3e9A4cXHnWbyg", ""),
+    ("doki",     "Doki",     "dokihuh.png",     "UComInW10MkHJs-_vi4rHQCQ", ""),
+    ("doob",     "Doob",     "",                "UC6T7TJZbW6nO-qsc5coo8Pg", ""),
+    ("irys",     "IRyS",     "",                "UC8rcEBzJSleTkf_-agPM20g", ""),
 ]

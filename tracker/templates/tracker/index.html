@@ -1,12 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<head><title>oh hi</title></head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>oh hi</title>
+    <link rel="stylesheet" href="{% static 'tracker/css/styles.css' %}">
+</head>
 <body>
-  <h1>VTubers</h1>
-  <ul>
-    {% for v in vtubers %}
-      <li>{{ v.name }} — {% if v.is_live_youtube or v.is_live_twitch %}🔴 live{% else %}offline{% endif %}</li>
-    {% endfor %}
-  </ul>
+    <select id="channelSelector">
+        {% for v in vtubers %}
+        <option value="{{ v.slug }}" data-image="{% static 'tracker/images/' %}{{ v.icon|default:'placeholder.png' }}">
+            {{ v.name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <div class="card">
+        <img id="vtuberImage" src="" alt="" style="width: 200px; height: 200px; object-fit: cover; border-radius: 0.8rem;">
+        <p id="vtuberStatus"></p>
+    </div>
+
+    <script>
+        const select = document.getElementById("channelSelector");
+        const img = document.getElementById("vtuberImage");
+
+        function applySelection() {
+            const opt = select.options[select.selectedIndex];
+            document.documentElement.className = opt.value;   // drives the :root.<slug> CSS vars
+            img.src = opt.dataset.image;
+        }
+
+        select.addEventListener("change", applySelection);
+        applySelection();  // run once on load for the default selection
+    </script>
 </body>
 </html>

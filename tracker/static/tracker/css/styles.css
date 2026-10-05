@@ -1,0 +1,480 @@
+@import"https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap";
+@import"https://fonts.googleapis.com/css2?family=Shadows+Into+Light+Two&display=swap";
+
+*,*:before,*:after {
+    box-sizing: border-box;
+    margin: 0;
+    position: relative;
+}
+html, body {
+    width: 100%;
+  }
+:root,
+    :root.mumei {
+        --background-color: rgb(145, 108, 100);
+        --card-color: rgb(200, 160, 110);
+        --text-color-dark: rgb(92, 42, 36);
+        --text-color-light: rgb(255, 215, 170);
+        --border-color: rgb(200, 160, 110);
+        --font-family: Patrick Hand;
+    }
+    :root.fauna {
+        --background-color: #69ab81;
+        --card-color: #ade490;
+        --text-color-dark: #2c3e50;
+        --text-color-light: rgb(229 255 233);
+        --border-color: rgb(53 93 55);
+        --font-family: Patrick Hand;
+    }
+    :root.bae {
+        --background-color: rgb(150 50 50);
+        --card-color: rgb(255 174 176);
+        --text-color-dark: rgb(42 53 68);;
+        --text-color-light: rgb(240 238 229);
+        --border-color: rgb(255 174 176);
+        --font-family: Shadows Into Light Two;
+    }
+    :root.kronii {
+        --background-color: rgb(77 114 192);
+        --card-color: rgb(164 207 234);
+        --text-color-dark: rgb(79 81 109);
+        --text-color-light: rgb(212 176 53);
+        --border-color: rgb(164 207 234);
+        --font-family: Patrick Hand;
+    }
+    :root.liz {
+        --background-color: rgb(154 42 44);
+        --card-color: rgb(28 90 163);
+        --text-color-dark: rgb(231 223 208);
+        --text-color-light: rgb(255 214 200);
+        --border-color: rgb(28 90 163);
+        --font-family: Patrick Hand;
+    }
+    :root.nerissa {
+        --background-color: rgb(56 16 78);
+        --card-color: rgb(32 33 33);
+        --text-color-dark: rgb(65 137 236);
+        --text-color-light: rgb(215 209 187);
+        --border-color: rgb(32 33 33);
+        --font-family: Patrick Hand;
+    }
+    :root.gura {
+        --background-color: rgb(38 130 205);
+        --card-color: rgb(193 227 235);
+        --text-color-dark: rgb(15 60 120);
+        --text-color-light: rgb(228 96 96);
+        --border-color: rgb(193 227 235);
+        --font-family: Patrick Hand;
+    }
+    :root.ina {
+        --background-color: rgb(104 87 129);
+        --card-color: rgb(142 159 189);
+        --text-color-dark: rgb(255 217 202);
+        --text-color-light: rgb(243 164 98);
+        --border-color: rgb(142 159 189);
+        --font-family: Patrick Hand;
+    }
+    :root.kiara {
+        --background-color: rgb(239 112 66);
+        --card-color: rgb(204 224 211);
+        --text-color-dark: rgb(104 58 120);
+        --text-color-light: rgb(70 78 177);
+        --border-color: rgb(204 224 211);
+        --font-family: Patrick Hand;
+    }
+    :root.minto {
+        --background-color: rgb(91, 183, 166);
+        --card-color: rgb(158, 243, 214);
+        --text-color-dark: rgb(101 67 63);
+        --text-color-light: rgb(188 237 255);
+        --border-color: rgb(158, 243, 214);
+        --font-family: Patrick Hand;
+    }
+    :root.raora {
+        --background-color: rgb(248 155 189);
+        --card-color: rgb(207 71 121);
+        --text-color-dark: rgb(255 233 249);
+        --text-color-light: rgb(255 217 247);
+        --border-color: rgb(207 71 121);
+        --font-family: Patrick Hand;
+    }
+    :root.kaela {
+        --background-color: rgb(249 212 105);
+        --card-color: rgb(46 41 42);
+        --text-color-dark: rgb(206 170 132);
+        --text-color-light: rgb(248 49 49);
+        --border-color: rgb(46 41 42);
+        --font-family: Patrick Hand;
+    }
+    :root.gigi {
+        --background-color: rgb(232 125 43);
+        --card-color: rgb(182 6 24);
+        --text-color-dark: rgb(255 178 210);
+        --text-color-light: rgb(255 232 115);
+        --border-color: rgb(182 6 24);
+        --font-family: Patrick Hand;
+    }
+    :root.shiorin {
+        --background-color: rgb(68 54 95);
+        --card-color: rgb(36 30 39);
+        --text-color-dark: rgb(95 118 180);
+        --text-color-light: rgb(220 179 164);
+        --border-color: rgb(36 30 39);
+        --font-family: Patrick Hand;
+    }
+    :root.doki {
+        --background-color: rgb(233 170 60);
+        --card-color: rgb(43 34 46);
+        --text-color-dark: rgb(134 182 182);
+        --text-color-light: rgb(201 68 88);
+        --border-color: rgb(43 34 46);
+        --font-family: Patrick Hand;
+    }
+    :root.doob {
+        --background-color: rgb(247 212 147);
+        --card-color: rgb(85 86 120);
+		--text-color-dark: rgb(161 222 138);
+        --text-color-light: rgb(229 130 148);
+        --border-color: rgb(85 86 120);
+        --font-family: Patrick Hand;
+    }
+    :root.irys {
+        --background-color: rgb(135 0 88);
+        --card-color: rgb(253 252 255);
+        --text-color-dark: rgb(44 4 27);
+        --text-color-light: rgb(71 211 207);
+        --border-color: rgb(253 252 255);
+        --font-family: Patrick Hand;
+    }
+.image-container {
+    display: flex;
+    width: 380px;
+    height: 200px;
+    margin: auto; /*Centers horizontally*/
+    margin-bottom: 20px;
+    flex-direction: row;
+}
+.image-container a{
+    align-self: flex-end;
+}
+#clickableImage {
+    width: 200px;
+    height: 200px;
+    transition: transform 0.3s, filter 0.3s; /* Smooth transition */
+    filter: grayscale(100%); /* Convert image to grayscale */
+}
+#clickableImage:hover {
+    transform: scale(1.1); /* Scale image by 10% on hover */
+    filter: grayscale(0%); /* Remove grayscale filter on hover */
+}
+#altClickableImage {
+    width: 90px;
+    height: 90px;
+    transition: transform 0.3s, filter 0.3s; /* Smooth transition */
+    filter: grayscale(100%); /* Convert image to grayscale */
+    
+    align-self: flex-end;
+}
+#altClickableImage:hover {
+    transform: scale(1.1); /* Scale image by 10% on hover */
+    filter: grayscale(0%); /* Remove grayscale filter on hover */
+}
+#reloadButton {
+    width: 90px;
+    height: 90px;
+    align-self: flex-end;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: 0%;
+    text-decoration: none;
+    border: none;
+    background-color: var(--background-color);
+    color: var(--text-color-light);
+    border-radius: 50%;
+    font-size: 60px;
+    transition: transform 0.3s, filter 0.3s; /* Smooth transition */
+}
+#reloadButton:hover {
+    transform: scale(1.1); /* Scale image by 10% on hover */
+    transition: transform 0.3s, filter 0.3s; /* Smooth transition */
+}
+header {
+    font-family: var(--font-family);
+    color: var(--text-color-light);
+    text-rendering: optimizeLegibility;
+}
+body {
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color-light);
+    text-align: center;
+    text-rendering: optimizeLegibility;
+    font-family: var(--font-family);
+}
+h1 a {
+    color: inherit; /* Use the color of the parent element */
+    text-decoration: underline transparent;
+    transition: text-decoration 0.3s ease;
+}
+h1 a:hover {
+    text-decoration: underline;
+}
+hr {
+	border-color: var(--text-color-dark);
+	height: 1px;
+	opacity: .75;
+}
+.card {
+    border: 0px solid var(--border-color);
+    border-radius: 0.8rem;
+    padding: 2rem;
+    padding-left: calc(2rem + 25px);
+    padding-right: calc(2rem + 25px);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-color);
+    max-width: 40rem; /* Change max-width to adjust size */
+    margin: 15px auto;
+    height: auto;
+}
+@media screen and (max-width: calc(40rem + 30px) ) {
+    .card {
+        margin: 15px 15px;
+    }
+}
+@media screen and (max-width: calc(35rem) ) {
+    #subs, #views {
+        float: none;
+        text-align: center;
+        width: 100%; /* Make the headings occupy full width */
+    }
+    #horizontalDivider {
+        display: none;
+    }
+}
+.card h2 {
+    font-size: 3rem;
+    color: var(--text-color-dark);
+    margin-bottom: 10px;
+}
+.card p {
+    font-size: 2.5rem;
+    color: var(--text-color-dark);
+}
+#subs {
+    float: left;
+}
+#views {
+    float: right;
+}
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+#horizontalDivider {
+    position: absolute;
+    top: 20px;
+    bottom: 20px;
+    left: 50%; /* Position the divider in the middle */
+    width: 2px; /* Set the width of the divider */
+    background-color: var(--text-color-dark); /* Choose the color of the divider */
+    transform: translateX(-50%);  /*Center the divider horizontally */
+}
+#apiKeySubmitButton {
+    background: var(--text-color-dark);
+    color: var(--text-color-light);
+    font-family: var(--font-family);
+    font-size: 1.5rem;
+    border-radius: 1rem;
+    padding: 5px 10px;
+}
+#apiKeyInputBox {
+    font-family: var(--font-family);
+    font-size: 1.5rem;
+    margin: .5rem;
+    border-radius: .4rem;
+    text-align: center;
+}
+#apiKeyHoloSubmitButton {
+    background: var(--text-color-dark);
+    color: var(--text-color-light);
+    font-family: var(--font-family);
+    font-size: 1.5rem;
+    border-radius: 1rem;
+    padding: 5px 10px;
+}
+#apiKeyHoloInputBox {
+    font-family: var(--font-family);
+    font-size: 1.5rem;
+    margin: .5rem;
+    border-radius: .4rem;
+    text-align: center;
+}
+#livestreamDisplay {
+    padding: .5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.card-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.8rem;
+}
+p.top-left-text {
+    margin-bottom: 5px;
+    font-size: 1.75rem;
+}
+#livestreamInfoDisplay {
+    padding: .5rem 0rem 0rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+p.bottom-left-text {
+    margin: 0;
+    align-self: flex-start;
+    font-size: 1.5rem;
+}
+#livestreamButtonDisplay {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.button {
+    appearance: none;
+    -webkit-appearance: none;
+    max-width: fit-content;
+    padding: 6px 6px;
+    border-radius: 12px;
+    border-width: 2px;
+    background-color: var(--text-color-dark);
+    color: var(--text-color-light);
+    text-decoration: none;
+    align-self: flex-start;
+    margin-left: 5px;
+    border-color: var(--text-color-dark);
+}
+.select {
+    font-family: var(--font-family);
+    color: var(--text-color-light);
+    background-color: transparent;
+    padding: 5px;
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    text-align: center;
+    text-align-last: center;
+    font-size: 8rem;
+    font-weight: 400;
+} 
+select{
+    scrollbar-width: none; /*For Firefox*/;
+    -ms-overflow-style: none;  /*For Internet Explorer 10+*/;
+}
+select::-webkit-scrollbar { /*For WebKit Browsers*/
+    width: 0;
+}
+.select option {
+    font-size: 4rem;
+    text-align: center;
+    background: var(--background-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+.small-option {
+    font-size: 2rem;
+}
+select:focus{
+    outline:none;
+    appearance: none;
+    -moz-appearance: none;
+}
+#jsonImportExport{
+    display: flex;
+    flex-direction: row;
+    
+    border: 0px solid var(--border-color);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0);
+    border-radius: 0.8rem;
+    background-color: var(--background-color);
+}
+#jsonImportButton {
+    padding: 10px;
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: 0%;
+    text-decoration: none;
+    border: none;
+    background-color: var(--background-color);
+    color: var(--text-color-light);
+    border-radius: 25%;
+    font-size: 60px;
+    transition: transform 0.3s, filter 0.3s; /* Smooth transition */
+}
+#jsonImportButton:hover {
+    transform: scale(1.1); /* Scale image by 10% on hover */
+    transition: transform 0.3s, filter 0.3s; /* Smooth transition */
+}
+#jsonExportButton {
+    padding: 10px;
+    width: 100px;
+    height: 100px;
+    
+    margin: auto;
+    align-self: flex-end;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: 0%;
+    text-decoration: none;
+    border: none;
+    background-color: var(--background-color);
+    color: var(--text-color-light);
+    border-radius: 25%;
+    font-size: 60px;
+    transition: transform 0.3s, filter 0.3s; /* Smooth transition */
+}
+#jsonExportButton:hover {
+    transform: scale(1.1); /* Scale image by 10% on hover */
+    transition: transform 0.3s, filter 0.3s; /* Smooth transition */
+}
+#containerAll {
+	display: flex;
+	flex-direction: row;
+}
+#containerLeft {
+	margin: auto;
+	margin-right: 0px;
+	width: 25%;
+}
+#containerCenter {
+	margin: auto;
+}
+#containerRight {
+	margin: auto;
+	margin-left: 0px;
+	width: 25%;
+	text-align: left;
+}
+#statusDisplay {
+	padding: 1rem 2.5rem;
+	max-width: 70%;
+	display: inline-block;
+}
+@media screen and (max-width: 1500px) {
+    #statusDisplay {
+		display: none;
+	}
+	#containerLeft {
+		display: none;
+	}
+	#containerRight {
+		display: none;
+	}
+}
