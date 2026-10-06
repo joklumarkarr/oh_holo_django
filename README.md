@@ -1,25 +1,25 @@
-Activate venv
+## Development Stuff
+### Activate venv
     (Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) # powershell
-Change vtuber list by editing seed_data.py and adding css
-Seed data from the vtuber list with 
+### Seeding vtuber list
     python manage.py seed_data
-Import holodex api key as such:
+Change vtuber list by editing seed_data.py and adding css
+### Import holodex api key as such:
     export HOLODEX_API_KEY=your_key_here      # macOS/Linux
     $env:HOLODEX_API_KEY = "your_key_here"    # Windows PowerShell
-Start redis for testing:
+### Start redis for testing:
     docker run -d -p 6379:6379 --name oh-holo-redis redis:7
-Test redis with:
     docker exec -it oh-holo-redis redis-cli ping
-Test live poll during runserver:
+### Test live poll during runserver:
     python manage.py poll_live --interval 30 -v 2
-Deploying in docker:
+### Deploying in docker:
     docker compose up --build
     docker compose logs -f poller
     docker compose exec web python manage.py createsuperuser
 
 ## Deploying somewhere real
 
-Two Django settings need your actual domain before this app will work outside localhost:
+Two Django settings need an actual domain before this app will work outside localhost:
 
 ### 1. ALLOWED_HOSTS
 Django refuses to serve HTTP requests — and Channels refuses WebSocket
